@@ -1,13 +1,4 @@
 <?php
-
-phpinfo();
-die;
-
-
-
-
-
-
 interface ContainerInterface{
     function bind(string $abstract,$concrete);
     function make(string $abstract, $parameters = []);
@@ -198,7 +189,12 @@ class Ioc
         return $concrete($this);
     }
     public function build($concrete) {
-        $reflector = new ReflectionClass($concrete);
+        try{
+            $reflector = new ReflectionClass($concrete);
+        }catch (\Exception $e){
+            return false;
+        }
+
         $constructor = $reflector->getConstructor();
         if(is_null($constructor)) {
             return $reflector->newInstance();
